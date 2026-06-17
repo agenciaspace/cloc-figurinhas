@@ -6,6 +6,7 @@ import { TrendingView } from './views/TrendingView'
 import { CollectionsView } from './views/CollectionsView'
 import { SearchView } from './views/SearchView'
 import { StickerModal } from './components/StickerModal'
+import { InstallPrompt } from './components/InstallPrompt'
 import { Loading, ErrorState } from './components/States'
 import { HomeIcon, FireIcon, PackIcon, SearchIcon } from './components/Icons'
 
@@ -93,6 +94,8 @@ export default function App() {
           <span className="header__count">{stickers.length} figurinhas</span>
         )}
       </header>
+
+      <InstallPrompt />
 
       <main className="main">{body}</main>
 
