@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { Sticker } from './lib/stickers'
 import { fetchStickers } from './lib/stickers'
 import { HomeView } from './views/HomeView'
@@ -32,6 +32,23 @@ export default function App() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selected, setSelected] = useState<Sticker | null>(null)
+  const [origin, setOrigin] = useState<string | null>(null)
+
+  // Distinct origin facets across the library (public group names + the
+  // anonymous "Conversas privadas" bucket), busiest first.
+  const allOrigins = useMemo(() => {
+    const count = new Map<string, number>()
+    for (const s of stickers)
+      for (const o of s.origins || []) count.set(o, (count.get(o) || 0) + 1)
+    return [...count.entries()].sort((a, b) => b[1] - a[1]).map(([o]) => o)
+  }, [stickers])
+
+  // Apply the active origin filter before handing stickers to any view.
+  const shown = useMemo(
+    () =>
+      origin ? stickers.filter((s) => (s.origins || []).includes(origin)) : stickers,
+    [stickers, origin],
+  )
 
   const load = useCallback(() => {
     const controller = new AbortController()
@@ -69,16 +86,16 @@ export default function App() {
   } else {
     switch (tab) {
       case 'alta':
-        body = <TrendingView stickers={stickers} onSelect={setSelected} />
+        body = <TrendingView stickers={shown} onSelect={setSelected} />
         break
       case 'colecoes':
-        body = <CollectionsView stickers={stickers} onSelect={setSelected} />
+        body = <CollectionsView stickers={shown} onSelect={setSelected} />
         break
       case 'buscar':
-        body = <SearchView stickers={stickers} onSelect={setSelected} />
+        body = <SearchView stickers={shown} onSelect={setSelected} />
         break
       default:
-        body = <HomeView stickers={stickers} onSelect={setSelected} />
+        body = <HomeView stickers={shown} onSelect={setSelected} />
     }
   }
 
@@ -87,13 +104,36 @@ export default function App() {
       <header className="header">
         <img className="header__logo" src="/favicon.svg" alt="" />
         <div>
-          <div className="header__title">Figurinhas CLOC</div>
-          <div className="header__sub">CLOC Brasil — Bate papo</div>
+          <div className="header__title">Figurinhas</div>
+          <div className="header__sub">Coletadas das conversas no WhatsApp</div>
         </div>
         {!loading && !error && (
-          <span className="header__count">{stickers.length} figurinhas</span>
+          <span className="header__count">
+            {shown.length}
+            {origin ? ` de ${stickers.length}` : ''} figurinhas
+          </span>
         )}
       </header>
+
+      {!loading && !error && allOrigins.length > 1 && (
+        <div className="origins" role="tablist" aria-label="Filtrar por origem">
+          <button
+            className={`ochip${origin === null ? ' ochip--active' : ''}`}
+            onClick={() => setOrigin(null)}
+          >
+            Todas
+          </button>
+          {allOrigins.map((o) => (
+            <button
+              key={o}
+              className={`ochip${origin === o ? ' ochip--active' : ''}`}
+              onClick={() => setOrigin((cur) => (cur === o ? null : o))}
+            >
+              {o}
+            </button>
+          ))}
+        </div>
+      )}
 
       <InstallPrompt />
 

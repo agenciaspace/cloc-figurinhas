@@ -46,13 +46,11 @@ export function StickerModal({ sticker, onClose }: Props) {
         {!showHelp ? (
           <>
             <div className="preview">
-              <img src={url} alt="Figurinha CLOC" />
+              <img src={url} alt="Figurinha" />
             </div>
             <div className="preview__meta">
               <span>🔥 {sticker.count}</span>
-              <span>
-                {sticker.count === 1 ? 'uso no grupo' : 'usos no grupo'}
-              </span>
+              <span>{sticker.count === 1 ? 'uso' : 'usos'}</span>
             </div>
             <div className="sheet__actions">
               <a

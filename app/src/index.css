@@ -100,6 +100,42 @@ a {
   border: 1px solid var(--border);
   padding: 4px 10px;
   border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* ---------- Origin filter ---------- */
+.origins {
+  position: sticky;
+  top: calc(var(--header-h) + env(safe-area-inset-top));
+  z-index: 25;
+  display: flex;
+  gap: 8px;
+  padding: 10px 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: rgba(11, 20, 26, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.origins::-webkit-scrollbar {
+  display: none;
+}
+.ochip {
+  flex: 0 0 auto;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 6px 13px;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+.ochip--active {
+  color: #06281a;
+  background: var(--accent);
+  border-color: var(--accent);
 }
 
 .main {

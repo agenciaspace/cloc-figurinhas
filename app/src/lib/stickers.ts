@@ -17,6 +17,11 @@ export interface Sticker {
    * search "just works" once the field is added upstream.
    */
   tags?: string[]
+  /**
+   * Anonymized origin facets — public group names plus a single "Conversas
+   * privadas" bucket for all DMs (no individual contact is ever named).
+   */
+  origins?: string[]
 }
 
 export function stickerImageUrl(file: string): string {

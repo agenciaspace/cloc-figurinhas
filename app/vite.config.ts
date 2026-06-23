@@ -11,10 +11,10 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'icon-192.png', 'icon-512.png'],
       manifest: {
-        name: 'Figurinhas CLOC',
+        name: 'Figurinhas',
         short_name: 'Figurinhas',
         description:
-          'Figurinhas do grupo CLOC Brasil — Bate papo. Navegue, baixe e adicione no WhatsApp.',
+          'Figurinhas coletadas das conversas no WhatsApp. Navegue, baixe e adicione no WhatsApp.',
         theme_color: '#111b21',
         background_color: '#0b141a',
         display: 'standalone',
